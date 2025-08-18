@@ -1,0 +1,44 @@
+[
+  {
+    "title": "Intern Logbook",
+    "description": "An internship logbook system with page-flipping preview and shareable link.",
+    "liveDemoUrl": "https://thisismywebsite.kesug.com/internlogbook",
+    "githubUrl": "https://github.com/manli03/InternLogBook",
+    "githubStatus": "public"
+  },
+  {
+    "title": "Telegram Bot for Prayer Times",
+    "description": "Telegram Bot for Prayer Time in Malaysia using e-solat API from JAKIM.",
+    "liveDemoUrl": "https://t.me/s294214_bot",
+    "githubUrl": "https://github.com/manli03/Telegram-Bot-Waktu-Solat",
+    "githubStatus": "public"
+  },
+  {
+    "title": "Mosque Mobile App",
+    "description": "Mobile App for Mosque Members with Prayer Reminders and Mosque News @ A’la Mosque.",
+    "liveDemoUrl": "https://bit.ly/AppMasjidAla",
+    "githubUrl": "#",
+    "githubStatus": "private"
+  },
+  {
+    "title": "Sudoku Web Game",
+    "description": "Sudoku Game Web Application with solo and multiplayer feature",
+    "liveDemoUrl": "https://thisismywebsite.kesug.com/sudoku",
+    "githubUrl": "https://github.com/manli03/Sudoku-Game",
+    "githubStatus": "public"
+  },
+  {
+    "title": "Hadith Translators",
+    "description": "Hadith Translations to Malay using the Gemini AI API",
+    "liveDemoUrl": "https://raw.githubusercontent.com/manli03/hadith/refs/heads/main/hadiths/bukhari/chapter_1.json",
+    "githubUrl": "https://github.com/manli03/hadith",
+    "githubStatus": "public"
+  },
+  {
+    "title": "Personal Expense Tracker Mobile App",
+    "description": "Mobile application that keep tracks everyday personal expense for each month.",
+    "liveDemoUrl": "https://median.co/share/rxnalk",
+    "githubUrl": "https://github.com/manli03/Personal_Expense_Tracker_App",
+    "githubStatus": "public"
+  }
+]

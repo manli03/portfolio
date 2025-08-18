@@ -4,10 +4,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aiman Norazli | Portfolio</title>
+    <title>Aiman Norazli | Digital Resume</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="dist/output.css" rel="stylesheet">
+    <link href="css/output.css" rel="stylesheet">
     <style>
         /* Ensures smooth transition for the theme toggle icon */
         #toggle-icon {
@@ -34,34 +38,27 @@
 
         /* Burger icon animation */
         #menu-btn span {
-            /* Apply common transition to all spans for smooth animation */
             transition: all 0.3s ease-in-out;
-            /* Ensures transformations originate from the center */
             transform-origin: center;
         }
 
-        /* State when the menu is active (menu-btn has 'group' class) */
+        /* Corrected translateY values for a precise 'X' shape */
         #menu-btn.group span:nth-child(1) {
-            /* Top bar: move down and rotate to form top part of 'X' */
-            transform: translateY(0.625rem) rotate(45deg);
-            /* 0.625rem is 2.5 * 0.25rem (Tailwind's spacing unit) */
+            transform: translateY(0.625rem) rotate(45deg); /* h-1 (0.25rem) + gap-1.5 (0.375rem) = 0.625rem */
         }
 
         #menu-btn.group span:nth-child(2) {
-            /* Middle bar: scale horizontally to disappear and fade out */
             transform: scaleX(0);
             opacity: 0;
         }
 
         #menu-btn.group span:nth-child(3) {
-            /* Bottom bar: move up and rotate to form bottom part of 'X' */
-            transform: translateY(-0.625rem) rotate(-45deg);
+            transform: translateY(-0.625rem) rotate(-45deg); /* -(h-1 + gap-1.5) = -0.625rem */
         }
     </style>
     <script>
         function toggleTheme() {
             document.documentElement.classList.toggle('dark');
-            // Save the user's preference to localStorage
             if (document.documentElement.classList.contains('dark')) {
                 localStorage.setItem('theme', 'dark');
             } else {
@@ -72,11 +69,9 @@
 
         function updateToggleIcon(loadFromStorage = false) {
             const toggleIcon = document.getElementById('toggle-icon');
-            // Only rotate the icon if it's a direct toggle click, not on initial page load
             if (!loadFromStorage) {
                 toggleIcon.classList.toggle('rotate-180');
             }
-            // Update icon based on theme
             if (document.documentElement.classList.contains('dark')) {
                 toggleIcon.classList.remove('fa-sun');
                 toggleIcon.classList.add('fa-moon');
@@ -86,11 +81,24 @@
             }
         }
 
-        // Set initial theme and icon
+        // Helper function to convert a string to a URL-friendly slug
+        function slugify(text) {
+            return text
+                .toString()
+                .normalize('NFD') // Normalize diacritics
+                .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+                .toLowerCase() // Convert to lowercase
+                .trim() // Trim leading/trailing whitespace
+                .replace(/\s+/g, '-') // Replace spaces with hyphens
+                .replace(/[^\w-]+/g, '') // Remove all non-word chars except hyphens
+                .replace(/--+/g, '-'); // Replace multiple hyphens with a single one
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Set initial theme
             if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
-                updateToggleIcon(true); // Indicate loading from storage, so no rotation on initial load
+                updateToggleIcon(true);
             } else {
                 document.documentElement.classList.remove('dark');
                 updateToggleIcon();
@@ -98,18 +106,14 @@
 
             // Scroll to top button logic
             const toTopButton = document.getElementById('to-top-button');
-
             if (toTopButton) {
-                // Show/hide scroll-to-top button based on scroll position
                 window.addEventListener('scroll', () => {
-                    if (window.scrollY > 400) { // Show button after scrolling 400px
+                    if (window.scrollY > 400) {
                         toTopButton.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
                     } else {
                         toTopButton.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
                     }
                 });
-
-                // Scroll to top on click
                 toTopButton.addEventListener('click', () => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
@@ -120,213 +124,320 @@
             const mobileMenu = document.getElementById('mobile-menu');
 
             menuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('active'); // Toggles visibility of the mobile menu
-                menuBtn.classList.toggle('group');     // Toggles 'group' class for burger icon animation
+                mobileMenu.classList.toggle('active');
+                menuBtn.classList.toggle('group');
             });
+
+            // Close mobile menu on link click
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    menuBtn.classList.remove('group');
+                });
+            });
+
+            // --- JavaScript for Projects Section ---
+            const projectsContainer = document.getElementById('projects-container');
+            // Define the base path for your project images
+            const projectImageBasePath = 'assets/images/';
+            // Define the default placeholder image base URL
+            const defaultPlaceholderBaseUrl = 'https://placehold.co/600x400/222222/34D399?text=';
+
+
+            if (projectsContainer) { // Ensure the container exists before trying to fetch
+                fetch('projects.json') // Make sure this path is correct relative to index.html
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(projects => {
+                        projects.forEach(project => {
+                            // Derive ID and image filename from the title
+                            const derivedId = slugify(project.title);
+                            const imageFilename = `${derivedId}.webp`;
+                            const imagePath = `${projectImageBasePath}${imageFilename}`;
+
+                            // Construct the onerror default image URL
+                            const defaultImageUrl = `${defaultPlaceholderBaseUrl}${encodeURIComponent(project.title)}`;
+
+                            // Determine the GitHub button HTML based on githubStatus
+                            let githubButtonHtml;
+                            if (project.githubStatus === 'public' && project.githubUrl) {
+                                githubButtonHtml = `
+                                    <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer"
+                                       class="inline-block border border-accent-main text-accent-main px-4 py-2 rounded-md font-medium hover:bg-accent-main hover:text-white
+                                              dark:border-dark-accent-main dark:text-dark-accent-main dark:hover:bg-dark-accent-main dark:hover:text-dark-text-light-primary
+                                              transition duration-200 focus:outline-none focus:ring-2 focus:ring-accent-main focus:ring-offset-2 dark:focus:ring-offset-dark-background">
+                                        <i class="fab fa-github mr-2"></i>GitHub
+                                    </a>
+                                `;
+                            } else if (project.githubStatus === 'private') {
+                                githubButtonHtml = `
+                                    <span class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium
+                                               bg-gray-50 text-text-dark-secondary border border-border-light
+                                               dark:bg-gray-700 dark:text-dark-text-light-secondary dark:border-dark-border
+                                               cursor-not-allowed">
+                                        <i class="fas fa-lock mr-2"></i>Private Repository
+                                    </span>
+                                `;
+                            } else {
+                                // Fallback for any other status or missing status
+                                githubButtonHtml = ``; // Or a disabled/N/A button
+                            }
+
+                            const projectCard = document.createElement('div');
+                            projectCard.className = `bg-background-light dark:bg-dark-background rounded-xl shadow-custom dark:shadow-lg-custom overflow-hidden
+                                                     transform hover:-translate-y-2 transition duration-300 ease-in-out hover:shadow-lg-custom
+                                                     border border-border-light dark:border-dark-border hover:border-accent-main dark:hover:border-dark-accent-main`;
+
+                            projectCard.innerHTML = `
+                                <img src="${imagePath}" alt="${project.title}" class="w-full h-48 object-cover"
+                                     onerror="this.onerror=null;this.src='${defaultImageUrl}';">
+                                <div class="p-5">
+                                    <h4 class="font-bold text-xl mb-2 text-text-dark-primary dark:text-dark-text-light-primary">${project.title}</h4>
+                                    <p class="text-sm text-text-dark-secondary dark:text-dark-text-light-secondary mb-4 line-clamp-3">${project.description}</p>
+                                    <div class="flex justify-start gap-3 text-sm">
+                                        <a href="${project.liveDemoUrl}" target="_blank" rel="noopener noreferrer"
+                                           class="inline-block bg-accent-main text-white px-4 py-2 rounded-md font-medium hover:bg-accent-hover dark:bg-dark-accent-main dark:hover:bg-dark-accent-hover transition duration-200 focus:outline-none focus:ring-2 focus:ring-accent-main focus:ring-offset-2 dark:focus:ring-offset-dark-background">
+                                            <i class="fas fa-play mr-2"></i>Live Demo
+                                        </a>
+                                        ${githubButtonHtml}
+                                    </div>
+                                </div>
+                            `;
+                            projectsContainer.appendChild(projectCard);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching projects:', error);
+                        // Display a user-friendly message if projects fail to load
+                        if (projectsContainer) {
+                            projectsContainer.innerHTML = '<p class="text-center text-text-dark-secondary dark:text-dark-text-light-secondary col-span-full">Failed to load projects. Please try again later.</p>';
+                        }
+                    });
+            }
+            // --- End JavaScript for Projects Section ---
         });
     </script>
 </head>
 
-<body class="bg-soft text-white dark:bg-gray-900 dark:text-gray-100">
+<body
+    class="font-sans bg-background-light text-text-dark-primary dark:bg-dark-background dark:text-dark-text-light-primary">
 
     <!-- Navigation -->
-    <header class="bg-primary text-white dark:bg-gray-800 sticky top-0 z-50 shadow-lg">
+    <header
+        class="bg-card-light dark:bg-dark-card sticky top-0 z-50 shadow-lg border-b border-border-light dark:border-dark-border">
         <nav class="max-w-6xl mx-auto p-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold">Aiman</h1>
-            <div class="hidden md:flex space-x-6 text-sm font-medium">
-                <a href="#home" class="hover:text-accent">Home</a>
-                <a href="#about" class="hover:text-accent">About</a>
-                <a href="#projects" class="hover:text-accent">Projects</a>
-                <a href="#skills" class="hover:text-accent">Skills</a>
-                <a href="#contact" class="hover:text-accent">Contact</a>
+            <h1 class="text-2xl font-bold text-text-dark-primary dark:text-dark-text-light-primary">Aiman</h1>
+            <div class="hidden md:flex space-x-8 text-base font-medium">
+                <a href="#home"
+                    class="text-text-dark-primary dark:text-dark-text-light-primary hover:text-accent-main dark:hover:text-dark-accent-main transition duration-200">Home</a>
+                <a href="#about"
+                    class="text-text-dark-primary dark:text-dark-text-light-primary hover:text-accent-main dark:hover:text-dark-accent-main transition duration-200">About</a>
+                <a href="#projects"
+                    class="text-text-dark-primary dark:text-dark-text-light-primary hover:text-accent-main dark:hover:text-dark-accent-main transition duration-200">Projects</a>
+                <a href="#skills"
+                    class="text-text-dark-primary dark:text-dark-text-light-primary hover:text-accent-main dark:hover:text-dark-accent-main transition duration-200">Skills</a>
+                <a href="#contact"
+                    class="text-text-dark-primary dark:text-dark-text-light-primary hover:text-accent-main dark:hover:text-dark-accent-main transition duration-200">Contact</a>
             </div>
             <div class="flex items-center space-x-4">
-                <button onclick="toggleTheme()" class="text-3xl bg-transparent text-white px-4 py-2 rounded">
-                    <i id="toggle-icon" class="fas fa-sun"></i>
+                <button onclick="toggleTheme()"
+                    class="w-10 h-10 rounded-full flex items-center justify-center bg-transparent text-text-dark-primary dark:text-dark-text-light-primary hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">
+                    <i id="toggle-icon" class="fas fa-sun text-xl"></i>
                 </button>
-                <button id="menu-btn" class="rounded-lg block md:hidden">
+                <button id="menu-btn"
+                    class="rounded-lg block md:hidden p-2 text-text-dark-primary dark:text-dark-text-light-primary">
                     <div class="grid justify-items-center gap-1.5">
-                        <span class="h-1 w-8 rounded-full bg-white"></span>
-                        <span class="h-1 w-8 rounded-full bg-white"></span>
-                        <span class="h-1 w-8 rounded-full bg-white"></span>
+                        <span class="h-1 w-6 rounded-full bg-text-dark-primary dark:bg-dark-text-light-primary"></span>
+                        <span class="h-1 w-6 rounded-full bg-text-dark-primary dark:bg-dark-text-light-primary"></span>
+                        <span class="h-1 w-6 rounded-full bg-text-dark-primary dark:bg-dark-text-light-primary"></span>
                     </div>
                 </button>
             </div>
         </nav>
-        <div id="mobile-menu" class="absolute top-16 w-full bg-primary dark:bg-gray-800 md:hidden">
-            <a href="#home" class="block py-2 px-4 text-sm hover:bg-secondary">Home</a>
-            <a href="#about" class="block py-2 px-4 text-sm hover:bg-secondary">About</a>
-            <a href="#projects" class="block py-2 px-4 text-sm hover:bg-secondary">Projects</a>
-            <a href="#skills" class="block py-2 px-4 text-sm hover:bg-secondary">Skills</a>
-            <a href="#contact" class="block py-2 px-4 text-sm hover:bg-secondary">Contact</a>
+        <div id="mobile-menu"
+            class="absolute top-full w-full bg-card-light dark:bg-dark-card shadow-md md:hidden origin-top">
+            <a href="#home"
+                class="block py-3 px-4 text-base text-text-dark-primary dark:text-dark-text-light-primary hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">Home</a>
+            <a href="#about"
+                class="block py-3 px-4 text-base text-text-dark-primary dark:text-dark-text-light-primary hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">About</a>
+            <a href="#projects"
+                class="block py-3 px-4 text-base text-text-dark-primary dark:text-dark-text-light-primary hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">Projects</a>
+            <a href="#skills"
+                class="block py-3 px-4 text-base text-text-dark-primary dark:text-dark-text-light-primary hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">Skills</a>
+            <a href="#contact"
+                class="block py-3 px-4 text-base text-text-dark-primary dark:text-dark-text-light-primary hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">Contact</a>
         </div>
     </header>
 
     <!-- Hero -->
     <section id="home"
-        class="py-24 bg-gradient-to-r from-accent to-secondary text-white text-center dark:from-accent dark:to-secondary">
-        <h2 class="text-4xl font-extrabold mb-4">Hi, I'm Aiman Norazli</h2>
-        <p class="text-lg mb-6">Final-year IT student majoring in Software Engineering | Passionate about technology and user-friendly applications</p>
+        class="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-accent-main to-accent-hover text-white text-center dark:from-dark-accent-main dark:to-dark-accent-hover">
+        <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight">Hi, I'm Aiman Norazli</h2>
+        <p class="text-lg sm:text-xl max-w-2xl mx-auto mb-8 opacity-90">Final-year IT student majoring in Software
+            Engineering | Passionate about technology and user-friendly applications</p>
         <a href="#projects"
-            class="bg-white text-primary px-6 py-2 rounded-full font-semibold hover:bg-accent hover:text-white transition">View
+            class="inline-block bg-card-light dark:bg-dark-background text-accent-main dark:text-dark-accent-main px-8 py-3 rounded-full font-semibold shadow-md hover:shadow-lg hover:bg-gray-100 dark:hover:bg-dark-card transition duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-accent-main focus:ring-offset-2 dark:focus:ring-offset-dark-background">View
             Projects</a>
     </section>
 
     <!-- About -->
-    <section id="about" class="py-20 px-4 md:px-0 bg-soft dark:bg-gray-800">
+    <section id="about" class="py-20 px-4 sm:px-6 lg:px-8 bg-background-light dark:bg-dark-background">
         <div class="max-w-4xl mx-auto text-center">
-            <h3 class="text-3xl font-bold text-white mb-4">About Me</h3>
-            <p class="text-gray-300 leading-relaxed mb-4 mx-4">
+            <h3 class="text-3xl font-bold text-text-dark-primary dark:text-dark-text-light-primary mb-6">About Me</h3>
+            <p
+                class="text-text-dark-secondary dark:text-dark-text-light-secondary leading-relaxed mb-6 mx-auto max-w-2xl">
                 I'm a final-year IT student majoring in Software Engineering at Universiti Utara Malaysia (UUM). I'm
-                passionate about
-                solving real-world problems through technology, especially by building practical and user-friendly
-                applications. I
-                specialize in hybrid mobile app development using Ionic and web development with PHP, HTML, CSS,
-                JavaScript, and
-                Angular. I also use AI tools to boost productivity, speed up development, and continuously improve my
-                skills. I'm a fast
-                learner who enjoys exploring new tools and turning ideas into working solutions.
+                passionate about solving real-world problems through technology, especially by building practical and
+                user-friendly
+                applications. I specialize in hybrid mobile app development using Ionic and PHP and web development with
+                HTML, CSS,
+                JavaScript, and Angular. I also use AI tools to boost productivity, speed up development, and
+                continuously improve my
+                skills. I'm a fast learner who enjoys exploring new tools and turning ideas into working solutions.
             </p>
-            <a href="assets/resume.pdf" class="text-accent font-semibold hover:underline" target="_blank">View My
-                Resume</a>
+            <a href="assets/resume.pdf"
+                class="text-accent-main dark:text-dark-accent-main font-semibold hover:underline transition duration-200"
+                target="_blank">View My
+                Resume <i class="fas fa-external-link-alt text-xs ml-1"></i></a>
         </div>
     </section>
 
     <!-- Projects -->
-    <section id="projects" class="py-20 px-4 bg-primary dark:bg-gray-900">
+    <section id="projects" class="py-20 px-4 sm:px-6 lg:px-8 bg-card-light dark:bg-dark-card">
         <div class="max-w-6xl mx-auto">
-            <h3 class="text-3xl font-bold text-center text-white mb-10">Projects</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-soft dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                    <img src="https://placehold.co/600x400/222222/1DCD9F?text=Logbook+App" alt="Project 1"
-                        class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="font-bold text-lg mb-2 text-white">Logbook App</h4>
-                        <p class="text-sm text-gray-400 mb-3">An internship logbook system with
-                            page-flipping preview and shareable link, built with Ionic Angular and PHP backend.</p>
-                        <div class="flex justify-between text-sm">
-                            <a href="#" class="text-accent hover:underline">Live Demo</a>
-                            <a href="#" class="text-white hover:underline">GitHub</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-soft dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                    <img src="https://placehold.co/600x400/222222/1DCD9F?text=Gemini+Portfolio" alt="Project 2"
-                        class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="font-bold text-lg mb-2 text-white">Gemini Portfolio</h4>
-                        <p class="text-sm text-gray-400 mb-3">A portfolio website built with Gemini AI and
-                            TailwindCSS. The website is fully responsive and features a dark mode toggle.</p>
-                        <div class="flex justify-between text-sm">
-                            <a href="#" class="text-accent hover:underline">Live Demo</a>
-                            <a href="#" class="text-white hover:underline">GitHub</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-soft dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                    <img src="https://placehold.co/600x400/222222/1DCD9F?text=UUM+Club+Management" alt="Project 3"
-                        class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="font-bold text-lg mb-2 text-white">UUM Club Management</h4>
-                        <p class="text-sm text-gray-400 mb-3">A club management system for UUM students, built with
-                            Ionic, Angular, and PHP. The system allows students to join clubs, view events, and manage
-                            their
-                            membership.</p>
-                        <div class="flex justify-between text-sm">
-                            <a href="#" class="text-accent hover:underline">Live Demo</a>
-                            <a href="#" class="text-white hover:underline">GitHub</a>
-                        </div>
-                    </div>
-                </div>
+            <h3 class="text-3xl font-bold text-center text-text-dark-primary dark:text-dark-text-light-primary mb-12">
+                Projects</h3>
+            <!-- This is where the projects will be loaded by JavaScript -->
+            <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project cards will be injected here -->
             </div>
         </div>
     </section>
 
     <!-- Skills -->
-    <section id="skills" class="py-20 px-4 bg-soft dark:bg-gray-800">
+    <section id="skills" class="py-20 px-4 sm:px-6 lg:px-8 bg-background-light dark:bg-dark-background">
         <div class="max-w-5xl mx-auto text-center">
-            <h3 class="text-3xl font-bold text-white mb-10">Skills</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 text-lg font-medium">
+            <h3 class="text-3xl font-bold text-text-dark-primary dark:text-dark-text-light-primary mb-12">Skills</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 <div
-                    class="flex flex-col items-center justify-center p-6 bg-primary rounded-xl shadow-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105">
+                    class="flex flex-col items-center justify-center p-6 bg-card-light dark:bg-dark-card rounded-xl shadow-custom dark:shadow-lg-custom
+                    border border-border-light dark:border-dark-border
+                    hover:border-accent-main dark:hover:border-dark-accent-main transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg-custom">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"
-                        class="h-16 w-16 mb-4" />
-                    <span class="text-white">Java</span>
+                        class="h-14 w-14 mb-3" alt="Java Icon" />
+                    <span
+                        class="text-text-dark-primary dark:text-dark-text-light-primary text-sm font-medium">Java</span>
                 </div>
                 <div
-                    class="flex flex-col items-center justify-center p-6 bg-primary rounded-xl shadow-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105">
+                    class="flex flex-col items-center justify-center p-6 bg-card-light dark:bg-dark-card rounded-xl shadow-custom dark:shadow-lg-custom
+                    border border-border-light dark:border-dark-border
+                    hover:border-accent-main dark:hover:border-dark-accent-main transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg-custom">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
-                        class="h-16 w-16 mb-4" />
-                    <span class="text-white">JavaScript</span>
+                        class="h-14 w-14 mb-3" alt="JavaScript Icon" />
+                    <span
+                        class="text-text-dark-primary dark:text-dark-text-light-primary text-sm font-medium">JavaScript</span>
                 </div>
                 <div
-                    class="flex flex-col items-center justify-center p-6 bg-primary rounded-xl shadow-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105">
+                    class="flex flex-col items-center justify-center p-6 bg-card-light dark:bg-dark-card rounded-xl shadow-custom dark:shadow-lg-custom
+                    border border-border-light dark:border-dark-border
+                    hover:border-accent-main dark:hover:border-dark-accent-main transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg-custom">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
-                        class="h-16 w-16 mb-4" />
-                    <span class="text-white">Python</span>
+                        class="h-14 w-14 mb-3" alt="Python Icon" />
+                    <span
+                        class="text-text-dark-primary dark:text-dark-text-light-primary text-sm font-medium">Python</span>
                 </div>
                 <div
-                    class="flex flex-col items-center justify-center p-6 bg-primary rounded-xl shadow-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105">
+                    class="flex flex-col items-center justify-center p-6 bg-card-light dark:bg-dark-card rounded-xl shadow-custom dark:shadow-lg-custom
+                    border border-border-light dark:border-dark-border
+                    hover:border-accent-main dark:hover:border-dark-accent-main transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg-custom">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg"
-                        class="h-16 w-16 mb-4" />
-                    <span class="text-white">Angular</span>
+                        class="h-14 w-14 mb-3" alt="Angular Icon" />
+                    <span
+                        class="text-text-dark-primary dark:text-dark-text-light-primary text-sm font-medium">Angular</span>
                 </div>
                 <div
-                    class="flex flex-col items-center justify-center p-6 bg-primary rounded-xl shadow-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105">
+                    class="flex flex-col items-center justify-center p-6 bg-card-light dark:bg-dark-card rounded-xl shadow-custom dark:shadow-lg-custom
+                    border border-border-light dark:border-dark-border
+                    hover:border-accent-main dark:hover:border-dark-accent-main transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg-custom">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg"
-                        class="h-16 w-16 mb-4" />
-                    <span class="text-white">Ionic</span>
+                        class="h-14 w-14 mb-3" alt="Ionic Icon" />
+                    <span
+                        class="text-text-dark-primary dark:text-dark-text-light-primary text-sm font-medium">Ionic</span>
                 </div>
                 <div
-                    class="flex flex-col items-center justify-center p-6 bg-primary rounded-xl shadow-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105">
+                    class="flex flex-col items-center justify-center p-6 bg-card-light dark:bg-dark-card rounded-xl shadow-custom dark:shadow-lg-custom
+                    border border-border-light dark:border-dark-border
+                    hover:border-accent-main dark:hover:border-dark-accent-main transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg-custom">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg"
-                        class="h-16 w-16 mb-4" />
-                    <span class="text-white">PHP</span>
+                        class="h-14 w-14 mb-3" alt="PHP Icon" />
+                    <span
+                        class="text-text-dark-primary dark:text-dark-text-light-primary text-sm font-medium">PHP</span>
                 </div>
                 <div
-                    class="flex flex-col items-center justify-center p-6 bg-primary rounded-xl shadow-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105">
+                    class="flex flex-col items-center justify-center p-6 bg-card-light dark:bg-dark-card rounded-xl shadow-custom dark:shadow-lg-custom
+                    border border-border-light dark:border-dark-border
+                    hover:border-accent-main dark:hover:border-dark-accent-main transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg-custom">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg"
-                        class="h-16 w-16 mb-4" />
-                    <span class="text-white">Linux</span>
+                        class="h-14 w-14 mb-3" alt="Linux Icon" />
+                    <span
+                        class="text-text-dark-primary dark:text-dark-text-light-primary text-sm font-medium">Linux</span>
                 </div>
                 <div
-                    class="flex flex-col items-center justify-center p-6 bg-primary rounded-xl shadow-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105">
+                    class="flex flex-col items-center justify-center p-6 bg-card-light dark:bg-dark-card rounded-xl shadow-custom dark:shadow-lg-custom
+                    border border-border-light dark:border-dark-border
+                    hover:border-accent-main dark:hover:border-dark-accent-main transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg-custom">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
-                        class="h-16 w-16 mb-4" />
-                    <span class="text-white">Docker</span>
+                        class="h-14 w-14 mb-3" alt="Docker Icon" />
+                    <span
+                        class="text-text-dark-primary dark:text-dark-text-light-primary text-sm font-medium">Docker</span>
                 </div>
                 <div
-                    class="flex flex-col items-center justify-center p-6 bg-primary rounded-xl shadow-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105">
+                    class="flex flex-col items-center justify-center p-6 bg-card-light dark:bg-dark-card rounded-xl shadow-custom dark:shadow-lg-custom
+                    border border-border-light dark:border-dark-border
+                    hover:border-accent-main dark:hover:border-dark-accent-main transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg-custom">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"
-                        class="h-16 w-16 mb-4" />
-                    <span class="text-white">MySQL</span>
+                        class="h-14 w-14 mb-3" alt="MySQL Icon" />
+                    <span
+                        class="text-text-dark-primary dark:text-dark-text-light-primary text-sm font-medium">MySQL</span>
                 </div>
                 <div
-                    class="flex flex-col items-center justify-center p-6 bg-primary rounded-xl shadow-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105">
+                    class="flex flex-col items-center justify-center p-6 bg-card-light dark:bg-dark-card rounded-xl shadow-custom dark:shadow-lg-custom
+                    border border-border-light dark:border-dark-border
+                    hover:border-accent-main dark:hover:border-dark-accent-main transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg-custom">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"
-                        class="h-16 w-16 mb-4" />
-                    <span class="text-white">Git & GitHub</span>
+                        class="h-14 w-14 mb-3" alt="Git Icon" />
+                    <span class="text-text-dark-primary dark:text-dark-text-light-primary text-sm font-medium">Git &
+                        GitHub</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Contact -->
-    <section id="contact" class="py-20 px-4 bg-gradient-to-r from-primary to-soft dark:from-gray-800 dark:to-gray-900">
-        <div class="max-w-xl mx-auto text-center">
-            <h3 class="text-3xl font-bold mb-6 text-white">Get in Touch</h3>
+    <section id="contact" class="py-20 px-4 sm:px-6 lg:px-8 bg-background-light dark:bg-dark-background">
+        <div
+            class="max-w-xl mx-auto text-center bg-card-light dark:bg-dark-card p-8 rounded-xl shadow-custom dark:shadow-lg-custom">
+            <h3 class="text-3xl font-bold mb-8 text-text-dark-primary dark:text-dark-text-light-primary">Get in Touch
+            </h3>
             <form action="https://api.web3forms.com/submit" method="POST" class="space-y-4 text-left">
 
                 <!-- Replace with your Access Key -->
-                <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+                <input type="hidden" name="access_key" value="a9218703-73f6-45c0-b2c1-7fd304420565">
 
                 <!-- Form Inputs -->
                 <input type="text" name="name" placeholder="Your Name" required
-                    class="w-full px-4 py-2 rounded bg-soft dark:bg-gray-700 text-white dark:text-gray-100" />
+                    class="w-full px-4 py-3 rounded-lg bg-background-light dark:bg-dark-background text-text-dark-primary dark:text-dark-text-light-primary border border-border-light dark:border-dark-border
+                    focus:outline-none focus:ring-2 focus:ring-accent-main dark:focus:ring-dark-accent-main focus:border-transparent transition duration-200" />
                 <input type="email" name="email" placeholder="Your Email" required
-                    class="w-full px-4 py-2 rounded bg-soft dark:bg-gray-700 text-white dark:text-gray-100" />
-                <textarea name="message" rows="4" placeholder="Your Message" required
-                    class="w-full px-4 py-2 rounded bg-soft dark:bg-gray-700 text-white dark:text-gray-100"></textarea>
+                    class="w-full px-4 py-3 rounded-lg bg-background-light dark:bg-dark-background text-text-dark-primary dark:text-dark-text-light-primary border border-border-light dark:border-dark-border
+                    focus:outline-none focus:ring-2 focus:ring-accent-main dark:focus:ring-dark-accent-main focus:border-transparent transition duration-200" />
+                <textarea name="message" rows="5" placeholder="Your Message" required
+                    class="w-full px-4 py-3 rounded-lg bg-background-light dark:bg-dark-background text-text-dark-primary dark:text-dark-text-light-primary border border-border-light dark:border-dark-border
+                    focus:outline-none focus:ring-2 focus:ring-accent-main dark:focus:ring-dark-accent-main focus:border-transparent transition duration-200 resize-y"></textarea>
 
                 <!-- Honeypot Spam Protection -->
                 <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
@@ -335,31 +446,38 @@
                 <!-- <input type="hidden" name="redirect" value="https://mywebsite.com/thanks.html"> -->
 
                 <button type="submit"
-                    class="bg-accent text-white px-6 py-2 rounded font-semibold hover:bg-secondary dark:hover:bg-gray-700 transition">Send</button>
+                    class="bg-accent-main text-white px-8 py-3 rounded-lg font-semibold shadow-md hover:bg-accent-hover dark:bg-dark-accent-main dark:hover:bg-dark-accent-hover transition duration-300 focus:outline-none focus:ring-2 focus:ring-accent-main focus:ring-offset-2 dark:focus:ring-offset-dark-background">Send
+                    Message</button>
 
             </form>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-primary text-white dark:bg-gray-900 py-8">
-        <div class="max-w-6xl mx-auto text-center">
-            <p class="text-lg font-semibold mb-4">Aiman Norazli</p>
-            <div class="flex justify-center gap-6 mb-4 text-2xl">
-                <a href="https://github.com/manli03" target="_blank" class="hover:text-accent"><i
+    <footer
+        class="bg-card-light dark:bg-dark-card text-text-dark-secondary dark:text-dark-text-light-secondary py-8 border-t border-border-light dark:border-dark-border">
+        <div class="max-w-6xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <p class="text-xl font-semibold mb-4 text-text-dark-primary dark:text-dark-text-light-primary">Aiman Norazli
+            </p>
+            <div class="flex justify-center gap-6 mb-4 text-3xl">
+                <a href="https://github.com/manli03" target="_blank"
+                    class="hover:text-accent-main dark:hover:text-dark-accent-main transition duration-200"><i
                         class="fab fa-github"></i></a>
-                <a href="https://linkedin.com/in/aimannorazli" target="_blank" class="hover:text-accent"><i
+                <a href="https://linkedin.com/in/aimannorazli" target="_blank"
+                    class="hover:text-accent-main dark:hover:text-dark-accent-main transition duration-200"><i
                         class="fab fa-linkedin"></i></a>
-                <a href="mailto:aimanmuhd993@gmail.com" class="hover:text-accent"><i class="fas fa-envelope"></i></a>
+                <a href="mailto:aimanmuhd993@gmail.com"
+                    class="hover:text-accent-main dark:hover:text-dark-accent-main transition duration-200"><i
+                        class="fas fa-envelope"></i></a>
             </div>
-            <p class="text-sm text-gray-400 dark:text-gray-500">© 2025 Aiman Norazli. All rights reserved.</p>
+            <p class="text-sm">© 2025 Aiman Norazli. All rights reserved.</p>
         </div>
     </footer>
 
     <!-- Scroll to Top Button -->
     <button id="to-top-button" title="Go to top"
-        class="fixed bottom-8 right-8 bg-accent text-white p-3 rounded-full shadow-lg hover:bg-secondary transition-all duration-300 ease-in-out transform opacity-0 translate-y-4 pointer-events-none">
-        <i class="fas fa-arrow-up"></i>
+        class="fixed bottom-8 right-8 bg-accent-main text-white p-4 rounded-full shadow-lg hover:bg-accent-hover dark:bg-dark-accent-main dark:hover:bg-dark-accent-hover transition-all duration-300 ease-in-out transform opacity-0 translate-y-4 pointer-events-none focus:outline-none focus:ring-2 focus:ring-accent-main focus:ring-offset-2 dark:focus:ring-offset-dark-background">
+        <i class="fas fa-arrow-up text-lg"></i>
     </button>
 
 </body>
