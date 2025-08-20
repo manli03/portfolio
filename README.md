@@ -1,45 +1,17 @@
-<<<<<<< HEAD
-# Aiman Norazli | Portfolio
-=======
 # Aiman Norazli | Digital Resume
->>>>>>> bc76077 (Enhance portfolio website with new features and improvements)
 
-A personal portfolio website built with TailwindCSS and vanilla JavaScript. It showcases my projects, skills, and provides a way for visitors to contact me. The website is fully responsive, features a dark mode theme.
+A modern and responsive personal portfolio website built with **TailwindCSS** and **vanilla JavaScript**.  
+It highlights my professional journey, technical skills, and selected projects in a clean and user-friendly layout.  
 
-## Installation
+## 🔑 Key Features
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/manli03/portfolio
-    ```
-2.  **Navigate to the project directory:**
-    ```bash
-    cd portfolio
-    ```
-3.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+- 🎨 **Responsive Design** – Optimized for seamless viewing across desktop, tablet, and mobile devices.  
+- 🌙 **Dark Mode Support** – Built-in theme toggle for improved accessibility and user preference.  
+- 💻 **Project Showcase** – Detailed case studies with visuals, descriptions, and links to live demos or repositories.  
+- ⚡ **Performance Optimized** – Lightweight structure with minimal dependencies for fast load times.  
+- 📬 **Contact Integration** – Simple and intuitive contact form to connect with potential collaborators or recruiters.  
+- 🛠️ **Scalable & Maintainable** – Built with clean, modular code for easy updates and future improvements.  
 
-## Usage
+---
 
-*   **To build the CSS:**
-    ```bash
-    npm run build
-    ```
-*   **To watch for changes and automatically rebuild the CSS:**
-    ```bash
-    npm run watch
-    ```
-*   **Open `index.html` in your browser to view the website.**
-
-<<<<<<< HEAD
-## Contributing
-
-Contributions are welcome! Please feel free to submit a pull request.
-
-=======
->>>>>>> bc76077 (Enhance portfolio website with new features and improvements)
-## License
-
-This project is licensed under the MIT License.
+This website not only serves as my **digital resume**, but also as a **personal brand platform** — demonstrating both my **technical expertise** and **eye for design**.  
