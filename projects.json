@@ -28,10 +28,10 @@
     "githubStatus": "public"
   },
   {
-    "title": "Hadith Translators",
-    "description": "Hadith Translations to Malay using the Gemini AI API",
-    "liveDemoUrl": "https://raw.githubusercontent.com/manli03/hadith/refs/heads/main/hadiths/bukhari/chapter_1.json",
-    "githubUrl": "https://github.com/manli03/hadith",
+    "title": "Chocolicious",
+    "description": "A web platform for browsing chocolate products and placing orders easily with a clean, user-friendly interface",
+    "liveDemoUrl": "https://thisismywebsite.kesug.com/chocolicious",
+    "githubUrl": "https://github.com/manli03/manli03.github.io/tree/main/chocolicious",
     "githubStatus": "public"
   },
   {
