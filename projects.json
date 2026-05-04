@@ -1,42 +1,42 @@
 [
   {
     "title": "Intern Logbook",
-    "description": "An internship logbook system with page-flipping preview and shareable link.",
+    "description": "A web-based internship logbook system designed to help students document and share daily activities efficiently. <br><br>Features a page-flipping preview interface and shareable links for easy supervisor access, improving documentation workflow and user experience.",
     "liveDemoUrl": "https://thisismywebsite.kesug.com/internlogbook",
     "githubUrl": "https://github.com/manli03/InternLogBook",
     "githubStatus": "public"
   },
   {
     "title": "Telegram Bot for Prayer Times",
-    "description": "Telegram Bot for Prayer Time in Malaysia using e-solat API from JAKIM.",
+    "description": "A Telegram bot that provides accurate daily prayer times for users in Malaysia. <br><br>Integrates with the JAKIM e-Solat API to deliver real-time updates, allowing users to conveniently check prayer times directly within Telegram.",
     "liveDemoUrl": "https://t.me/s294214_bot",
     "githubUrl": "https://github.com/manli03/Telegram-Bot-Waktu-Solat",
     "githubStatus": "public"
   },
   {
     "title": "Mosque Mobile App",
-    "description": "Mobile App for Mosque Members with Prayer Reminders and Mosque News @ A’la Mosque.",
+    "description": "A mobile application developed for mosque members to stay connected with community activities and prayer schedules. <br><br>Includes prayer time reminders, announcements, and news updates to enhance communication and engagement within the mosque.",
     "liveDemoUrl": "https://bit.ly/AppMasjidAla",
     "githubUrl": "#",
     "githubStatus": "private"
   },
   {
     "title": "Sudoku Web Game",
-    "description": "Sudoku Game Web Application with solo and multiplayer feature",
+    "description": "An interactive web-based Sudoku game supporting both solo and multiplayer gameplay. <br><br>Features real-time interaction and an intuitive interface, demonstrating game logic implementation and dynamic front-end development.",
     "liveDemoUrl": "https://thisismywebsite.kesug.com/sudoku",
     "githubUrl": "https://github.com/manli03/Sudoku-Game",
     "githubStatus": "public"
   },
   {
     "title": "Chocolicious",
-    "description": "A web platform for browsing chocolate products and placing orders easily with a clean, user-friendly interface",
+    "description": "A web-based platform for browsing and ordering chocolate products through a clean and user-friendly interface. <br><br>Includes product listings, detailed views, and a streamlined ordering process with a focus on responsive design.",
     "liveDemoUrl": "https://thisismywebsite.kesug.com/chocolicious",
     "githubUrl": "https://github.com/manli03/manli03.github.io/tree/main/chocolicious",
     "githubStatus": "public"
   },
   {
-    "title": "Personal Expense Tracker Mobile App",
-    "description": "Mobile application that keep tracks everyday personal expense for each month.",
+    "title": "Personal Expense Tracker",
+    "description": "A mobile application that helps users track and manage daily expenses efficiently. <br><br>Enables transaction recording and monthly spending monitoring, promoting better financial awareness through a simple and intuitive interface.",
     "liveDemoUrl": "https://median.co/share/rxnalk",
     "githubUrl": "https://github.com/manli03/Personal_Expense_Tracker_App",
     "githubStatus": "public"

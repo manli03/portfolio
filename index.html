@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aiman Norazli | Digital Resume</title>
+    <title>Aiman Norazli | Portfolio</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Google Fonts - Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -190,15 +190,16 @@
                             const projectCard = document.createElement('div');
                             projectCard.className = `bg-background-light dark:bg-dark-background rounded-xl shadow-custom dark:shadow-lg-custom overflow-hidden
                                                      transform hover:-translate-y-2 transition duration-300 ease-in-out hover:shadow-lg-custom
-                                                     border border-border-light dark:border-dark-border hover:border-accent-main dark:hover:border-dark-accent-main`;
+                                                     border border-border-light dark:border-dark-border hover:border-accent-main dark:hover:border-dark-accent-main
+                                                     flex flex-col h-full`;
 
                             projectCard.innerHTML = `
                                 <img src="${imagePath}" alt="${project.title}" class="w-full h-48 object-cover"
                                      onerror="this.onerror=null;this.src='${defaultImageUrl}';">
-                                <div class="p-5">
+                                <div class="p-5 flex flex-col flex-1">
                                     <h4 class="font-bold text-xl mb-2 text-text-dark-primary dark:text-dark-text-light-primary">${project.title}</h4>
-                                    <p class="text-sm text-text-dark-secondary dark:text-dark-text-light-secondary mb-4 line-clamp-3">${project.description}</p>
-                                    <div class="flex justify-start gap-3 text-sm">
+                                    <p class="text-sm text-text-dark-secondary dark:text-dark-text-light-secondary mb-4 flex-1">${project.description}</p>
+                                    <div class="flex justify-start gap-3 text-sm mt-auto">
                                         <a href="${project.liveDemoUrl}" target="_blank" rel="noopener noreferrer"
                                            class="inline-block bg-accent-main text-white px-4 py-2 rounded-md font-medium hover:bg-accent-hover dark:bg-dark-accent-main dark:hover:bg-dark-accent-hover transition duration-200 focus:outline-none focus:ring-2 focus:ring-accent-main focus:ring-offset-2 dark:focus:ring-offset-dark-background">
                                             <i class="fas fa-play mr-2"></i>Live Demo
@@ -277,8 +278,8 @@
     <section id="home"
         class="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-accent-main to-accent-hover text-white text-center dark:from-dark-accent-main dark:to-dark-accent-hover">
         <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight">Hi, I'm Aiman Norazli</h2>
-        <p class="text-lg sm:text-xl max-w-2xl mx-auto mb-8 opacity-90">Final-year IT student majoring in Software
-            Engineering | Passionate about technology and user-friendly applications</p>
+        <p class="text-lg sm:text-xl max-w-2xl mx-auto mb-8 opacity-90">Software Engineer building practical, user-friendly
+            applications that solve real-world problems</p>
         <a href="#projects"
             class="inline-block bg-card-light dark:bg-dark-background text-accent-main dark:text-dark-accent-main px-8 py-3 rounded-full font-semibold shadow-md hover:shadow-lg hover:bg-gray-100 dark:hover:bg-dark-card transition duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-accent-main focus:ring-offset-2 dark:focus:ring-offset-dark-background">View
             Projects</a>
@@ -290,13 +291,12 @@
             <h3 class="text-3xl font-bold text-text-dark-primary dark:text-dark-text-light-primary mb-6">About Me</h3>
             <p
                 class="text-text-dark-secondary dark:text-dark-text-light-secondary leading-relaxed mb-6 mx-auto max-w-2xl">
-                I'm a fresh graduate with a degree in Software Engineering from Universiti Utara Malaysia (UUM). I'm
-                passionate about solving real-world problems through technology, especially by building practical and
-                user-friendly
-                applications. I develop hybrid mobile applications using Ionic and PHP, and build modern, responsive web applications using Angular
-                and CodeIgniter, with strong front-end fundamentals. I also use AI tools to boost productivity, speed up development, and
-                continuously improve my
-                skills. I'm a fast learner who enjoys exploring new tools and turning ideas into working solutions.
+                I'm a Software Engineering graduate from Universiti Utara Malaysia (UUM) focused on building practical, user-friendly
+                applications. I develop hybrid mobile apps with Ionic and PHP, and modern web applications using Angular and
+                CodeIgniter.
+                <br><br>
+                I enjoy solving real-world problems through clean, efficient solutions and continuously improving my skills by exploring
+                new technologies and using AI tools to enhance productivity.
             </p>
             <a href="assets/resume.pdf"
                 class="text-accent-main dark:text-dark-accent-main font-semibold hover:underline transition duration-200"
@@ -468,7 +468,7 @@
                     class="hover:text-accent-main dark:hover:text-dark-accent-main transition duration-200"><i
                         class="fas fa-envelope"></i></a>
             </div>
-            <p class="text-sm">© 2025 Aiman Norazli. All rights reserved.</p>
+            <p class="text-sm">© 2026 Aiman Norazli. All rights reserved.</p>
         </div>
     </footer>
 
