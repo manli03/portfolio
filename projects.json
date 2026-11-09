@@ -1,44 +1,113 @@
 [
   {
+    "title": "Mosque Mobile App",
+    "description": "My final year project. An app for my local mosque with prayer times, reminders and announcements. Ionic couldn't do everything I needed, so I wrote some custom Java plugins.",
+    "stack": [
+      "Ionic",
+      "Angular",
+      "TypeScript",
+      "Java"
+    ],
+    "liveDemoUrl": "https://bit.ly/AppMasjidAla",
+    "githubUrl": "#",
+    "githubStatus": "private",
+    "badge": "Final year project",
+    "featured": true
+  },
+  {
     "title": "Cloud File Transfer",
-    "description": "A web-based file transfer platform that allows users to upload and share temporary files over the internet. <br><br>Integrates with Cloudflare R2 for cloud-based object storage, providing a convenient solution for transferring files between devices.",
+    "description": "Upload a file on one device, download it on another. Files are stored on Cloudflare R2 and only kept for a while.",
+    "stack": [
+      "PHP",
+      "CodeIgniter 4",
+      "Cloudflare R2"
+    ],
     "liveDemoUrl": "https://transfer.namia.site/",
     "githubUrl": "#",
+    "githubStatus": "private",
+    "featured": true
+  },
+  {
+    "title": "Malaysia Prayer Times Bot",
+    "description": "Get today's prayer times for any zone in Malaysia, using JAKIM's e-Solat data. Pick your state and zone once and it remembers them. Works in English and Bahasa Melayu.",
+    "stack": [
+      "Java",
+      "Docker"
+    ],
+    "liveDemoUrl": "https://t.me/malaysiaprayertimes_bot",
+    "githubUrl": "https://github.com/manli03/Telegram-Bot-Waktu-Solat",
+    "githubStatus": "public"
+  },
+  {
+    "title": "Image & PDF Compressor Bot",
+    "description": "A Telegram bot that shrinks JPEG, PNG, GIF and PDF files. You pick the quality and it remembers your setting. Files are deleted right after they're sent back.",
+    "stack": [
+      "Python",
+      "Ghostscript",
+      "Docker"
+    ],
+    "liveDemoUrl": "https://t.me/compressor_anbot",
+    "githubUrl": "https://github.com/manli03/Compressor-bot",
+    "githubStatus": "public"
+  },
+  {
+    "title": "Speech to Text Bot",
+    "description": "Send it a voice note or audio file and it replies with the transcript. It uses Whisper and detects the language on its own.",
+    "stack": [
+      "Python",
+      "aiogram",
+      "faster-whisper",
+      "Docker"
+    ],
+    "liveDemoUrl": "https://t.me/stt_anbot",
+    "githubUrl": "https://github.com/manli03/telegram-stt",
     "githubStatus": "private"
   },
   {
-    "title": "Mosque Mobile App",
-    "description": "A mobile application developed for mosque members to stay connected with community activities and prayer schedules. <br><br>Includes prayer time reminders, announcements, and news updates to enhance communication and engagement within the mosque.",
-    "liveDemoUrl": "https://bit.ly/AppMasjidAla",
+    "title": "OT & Claim Tracker Bot",
+    "description": "A Telegram bot for logging overtime hours and work claims. It shows a monthly summary and can export records to Excel or PDF.",
+    "stack": [
+      "Python",
+      "SQLite",
+      "Docker"
+    ],
+    "liveDemoUrl": "https://t.me/otclaimbot",
     "githubUrl": "#",
     "githubStatus": "private"
   },
   {
     "title": "Intern Logbook",
-    "description": "A web-based internship logbook system designed to help students document and share daily activities efficiently. <br><br>Features a page-flipping preview interface and shareable links for easy supervisor access, improving documentation workflow and user experience.",
-    "liveDemoUrl": "https://thisismywebsite.kesug.com/internlogbook",
+    "description": "For interns to log what they did each day. It has a page-flip preview and a share link, so supervisors can read it online.",
+    "stack": [
+      "PHP",
+      "HybridAuth"
+    ],
+    "liveDemoUrl": "https://internlog.namia.site/",
     "githubUrl": "https://github.com/manli03/InternLogBook",
     "githubStatus": "private"
   },
   {
-    "title": "Chocolicious",
-    "description": "A web-based platform for browsing and ordering chocolate products through a clean and user-friendly interface. <br><br>Includes product listings, detailed views, and a streamlined ordering process with a focus on responsive design.",
-    "liveDemoUrl": "https://thisismywebsite.kesug.com/chocolicious",
-    "githubUrl": "https://github.com/manli03/chocolicious",
-    "githubStatus": "public"
-  },
-  {
-    "title": "Telegram Bot for Prayer Times",
-    "description": "A Telegram bot that provides accurate daily prayer times for users in Malaysia. <br><br>Integrates with the JAKIM e-Solat API to deliver real-time updates, allowing users to conveniently check prayer times directly within Telegram.",
-    "liveDemoUrl": "https://t.me/s294214_bot",
-    "githubUrl": "https://github.com/manli03/Telegram-Bot-Waktu-Solat",
-    "githubStatus": "public"
-  },
-  {
     "title": "Sudoku Web Game",
-    "description": "An interactive web-based Sudoku game supporting both solo and multiplayer gameplay. <br><br>Features real-time interaction and an intuitive interface, demonstrating game logic implementation and dynamic front-end development.",
+    "description": "Sudoku in the browser. Play solo or against a friend in real time.",
+    "stack": [
+      "PHP",
+      "JavaScript",
+      "Bulma"
+    ],
     "liveDemoUrl": "https://thisismywebsite.kesug.com/sudoku",
     "githubUrl": "https://github.com/manli03/Sudoku-Game",
+    "githubStatus": "public"
+  },
+  {
+    "title": "Chocolicious",
+    "description": "A small online chocolate shop. Browse, check a product, place an order.",
+    "stack": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "liveDemoUrl": "https://thisismywebsite.kesug.com/chocolicious",
+    "githubUrl": "https://github.com/manli03/chocolicious",
     "githubStatus": "public"
   }
 ]
